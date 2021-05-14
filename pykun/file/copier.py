@@ -168,17 +168,7 @@ def cvtFilesSrcToDest( src, dest, factors ):
 def compareLine( sIter, dIter ):
 	return [ (lino, "SRC >>", sLine, "DEST >>", dLine) for lino, (sLine, dLine) in enumerate(zip(sIter, dIter)) if sLine != dLine ]
 
-def diffFile_3x(srcPath, destPath):
-	with open(srcPath, "rb") as s , open(destPath, "rb") as d:
-		cmpResult = compareLine(makeIter(s), makeIter(d))
-		if len(cmpResult) > 0 :
-			print("find ... Different : {srcPath} - {destPath}".format(**locals()))
-			logger.display(cmpResult, "Different")
-			return True
-	print("find ... Same : {srcPath} - {destPath}".format(**locals()))
-	return False
-
-def diffFile_2x(srcPath, destPath):
+def diffFile(srcPath, destPath):
 	with open(srcPath, "rb") as s :
 		with open(destPath, "rb") as d:
 			cmpResult = compareLine(makeIter(s), makeIter(d))
@@ -190,11 +180,6 @@ def diffFile_2x(srcPath, destPath):
 	return False
 
 def cpFilesSrcToDest( src, dest, prefix ) :
-	diffFile = diffFile_2x
-	from platform import python_version
-	if python_version()[0] >= "3" : # version 3 
-		diffFile = diffFile_3x
-
 	for name in searchFilesInDir(src):
 		try :
 			cpFilesSrcToDest(
