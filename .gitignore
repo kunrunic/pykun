@@ -1,0 +1,18 @@
+# ALL FILE Ignore
+*
+
+# Use Dir Register
+!*/
+
+# Ignore Dir Register
+__pycache__/
+build/
+dist/
+*.egg-info/
+
+# Use File Register
+!.gitignore
+!*.md
+!*.py
+!*.in
+!LICENSE
