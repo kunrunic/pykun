@@ -192,10 +192,18 @@ def cpFilesSrcToDest( src, dest, prefix ) :
 			pass
 		except Exception as e:
 			print(e)
-		if name.startswith(prefix) == True or prefix == False :
+		if name.endswith("_bk") == True :
+			return
+		def isPrefix():
+			if isinstance(prefix, bool) == True:
+				return True
+			return name.startswith(prefix) 
+
+		if isPrefix() == True :
 			srcName = "{src}/{name}".format(**locals())
 			destName = "{dest}/{name}".format(**locals())
 			if diffFile(srcName, destName) == True:
+				os.rename(destName, "{0}_{1}_bk".format(destName, time.strftime('%Y_%m_%d_%X', time.localtime(time.time()))))
 				print("ok ... Copy : {srcName} -> {destName}".format(**locals()))
 				shutil.copy2(srcName, destName)
 
@@ -225,7 +233,7 @@ def convert(src, dest, factors):
 def quickHelp():
 	print("Usege : copier [ option ] [ option arg ]")
 	print("Option :")
-	print("> cp - inputs [ src, dest, prefix ] ")
+	print("> diffcp - inputs [ src, dest, prefix ] ")
 	print("> cvt - inputs [src, dest, factors ] ... cvt factors input format is json")
 	print("> cvt factors format \'{\"DATA\":[{\"KEY\":\"CVT_MATCH_KEY\", \"VAL\":\"CVT_VAL\", \"OPT\":\"Insert Position\"}]}\' ")
 	print("> cvt factors option ")
@@ -253,7 +261,7 @@ def quickMain():
 		if len(sys.argv) >= 5 :
 			factors = sys.argv[4]
 		convert(src, dest, factors)
-	elif sys.argv[1] == "cp" :
+	elif sys.argv[1] == "diffcp" :
 		prefix = False
 		if len(sys.argv) >= 5 :
 			prefix = sys.argv[4]
