@@ -76,7 +76,7 @@ class Reproducer(object):
 		return self.__converts
 	@converts.setter
 	def converts(self, item):
-		if item != self._const_remove() :
+		if item != self._const_remove :
 			self.__converts.append(item)
 	@property
 	def match(self):
@@ -106,8 +106,8 @@ class Reproducer(object):
 		ePos = sPos + len(mInfo.key)
 		return b"".join([line[:ePos], mInfo.val, line[ePos:]])
 
-	def _textLimeRemove(self, line, mInfo):
-		return self._const_remove()
+	def _textLineRemove(self, line, mInfo):
+		return self._const_remove
 
 	def _convert(self, line, matchList):
 		if len(matchList) <= 0 :
@@ -117,7 +117,7 @@ class Reproducer(object):
 		cvtLine = line
 		for mInfo in matchList:
 			cvtLine = self.__writeOptionMap[mInfo.opt](cvtLine, mInfo)
-			if cvtLine == self._const_remove() : break #find remove const stopped loop 
+			if cvtLine == self._const_remove : break #find remove const stopped loop 
 		return cvtLine
 	
 	def process(self, line):
