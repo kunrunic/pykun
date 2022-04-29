@@ -37,7 +37,7 @@ class Reproducer(object):
 		Find the ''KEY'' value of ''MatchInfo'' in the file and change it to ''VAL'' according to ''OPT''.
 		Create a file with the changed information.
 	"""
-	__slots__ = ["__factors", "__converts", "__match", "__writeOptionMap"]
+	__slots__ = ["__factors", "__converts", "__match", "__writeOptionMap", "__CONST_REMOVE"]
 	def __init__(self):
 		self.__factors = list()
 		self.__converts = list()
@@ -48,7 +48,13 @@ class Reproducer(object):
 			"T<": self._textBefore,
 			"T>": self._textAfter,
 			"T.": self._textCurrent,
+			"T-": self._textLineRemove,
 		}
+		self.__CONST_REMOVE = "&_R-E*M+0?(V)E$%"
+	@property
+	def _const_remove(self):
+		return self.__CONST_REMOVE
+
 	@property
 	def factors(self):
 		return self.__factors
@@ -70,7 +76,8 @@ class Reproducer(object):
 		return self.__converts
 	@converts.setter
 	def converts(self, item):
-		self.__converts.append(item)
+		if item != self._const_remove() :
+			self.__converts.append(item)
 	@property
 	def match(self):
 		return self.__match
@@ -99,6 +106,9 @@ class Reproducer(object):
 		ePos = sPos + len(mInfo.key)
 		return b"".join([line[:ePos], mInfo.val, line[ePos:]])
 
+	def _textLimeRemove(self, line, mInfo):
+		return self._const_remove()
+
 	def _convert(self, line, matchList):
 		if len(matchList) <= 0 :
 			return line
@@ -107,8 +117,9 @@ class Reproducer(object):
 		cvtLine = line
 		for mInfo in matchList:
 			cvtLine = self.__writeOptionMap[mInfo.opt](cvtLine, mInfo)
+			if cvtLine == self._const_remove() : break #find remove const stopped loop 
 		return cvtLine
-
+	
 	def process(self, line):
 		self.converts = self._convert( line, [mInfo for mInfo in self.factors if line.find(mInfo.key) > -1] )
 
@@ -242,6 +253,7 @@ def quickHelp():
 	print(">> [T<] - text before")
 	print(">> [T>] - text after")
 	print(">> [T.] - text convert")
+	print(">> [T-] - text line remove")
 
 def quickMain():
 	try :
