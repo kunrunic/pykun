@@ -39,11 +39,12 @@ Option :
 > cvt - inputs [src, dest, factors ] ... cvt factors input format is json
 > cvt factors format '{"DATA":[{"KEY":"CVT_MATCH_KEY", "VAL":"CVT_VAL", "OPT":"Insert Position"}]}'
 > cvt factors option
->> [T^] - text added up
->> [T_] - text added down
->> [T<] - text before
->> [T>] - text after
->> [T.] - text convert
+>> [Tu] - text added up
+>> [Td] - text added down
+>> [Tb] - text before
+>> [Ta] - text after
+>> [Tc] - text convert
+>> [Tl] - text line remove
 ```
 
 #### **1.2 Module : configure**
@@ -54,11 +55,11 @@ This Module is current to give functions
 ```python
 >>> data = read('{"data":[{"key":"val", "key2":"val2", "KeY3":"Val3"}]}')
 >>> print("result :",data)
->>> data = read('{"Data":[{"Key":"INVITE","vaL":"TTT","OpT":"T."}, {"key":"from","val":"ttfrom","opt":"T<"}]}')
+>>> data = read('{"Data":[{"Key":"INVITE","vaL":"TTT","OpT":"Tc"}, {"key":"from","val":"ttfrom","opt":"Tb"}]}')
 >>> print("result :",data)
 
 result : {'DATA': [{'KEY': 'val', 'KEY2': 'val2', 'KEY3': 'Val3'}]}
-result : {'DATA': [{'KEY': 'INVITE', 'VAL': 'TTT', 'OPT': 'T.'}, {'KEY': 'from', 'VAL': 'ttfrom', 'OPT': 'T<'}]}
+result : {'DATA': [{'KEY': 'INVITE', 'VAL': 'TTT', 'OPT': 'Tc'}, {'KEY': 'from', 'VAL': 'ttfrom', 'OPT': 'Tb'}]}
 ```
 
 #### **1.3 Module : log**
